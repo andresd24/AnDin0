@@ -16,19 +16,12 @@ import 'rxjs/Rx.js';
 var RedditService = (function () {
     function RedditService(http) {
         this.http = http;
-        //this.baseUrl = 'https://www.reddit.com/r';
         this.baseUrl = 'http://127.0.0.1:3000/api/v1/heroes/';
-        var xhr = this.createCORSRequest('GET', this.baseUrl);
-        xhr.send();
     }
     RedditService.prototype.getPosts = function (category, limit) {
-        // return this.http.get(this.baseUrl + '/' + limit).
-        // map(res => res.json());
-    };
-    RedditService.prototype.createCORSRequest1 = function (method, url) {
         var headers = new Headers();
-        headers.append('Access-Control-Allow-Origin', 'localhost');
-        return this.http.get(url, { headers: headers }).map(function (res) { return res.res.json(); });
+        headers.append('Access-Control-Allow-Origin', '*');
+        return this.http.get(this.baseUrl, { headers: headers }).map(function (res) { return res.res.json(); });
     };
     // Create the XHR object.
     RedditService.prototype.createCORSRequest = function (method, url) {
@@ -69,10 +62,10 @@ var RedditService = (function () {
                 return;
             }
             // Response handlers.
-            xhr.onload = function () {
-                var text = xhr.response.json();
-                var title = getTitle(text);
-                alert('Response from CORS request to ' + url + ': ' + title);
+            xhr.onload = function (items) {
+                items = xhr.response.json();
+                //        var title = getTitle(items);
+                alert('Response from CORS request to ' + url);
             };
             xhr.onerror = function () {
                 alert('Woops, there was an error making the request.');

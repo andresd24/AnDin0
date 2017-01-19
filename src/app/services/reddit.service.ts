@@ -22,28 +22,19 @@ export class RedditService {
     constructor(http:Http)
     {
         this.http = http;
-        //this.baseUrl = 'https://www.reddit.com/r';
         this.baseUrl = 'http://127.0.0.1:3000/api/v1/heroes/';
-        var xhr = this.createCORSRequest('GET', this.baseUrl)
-        xhr.send();
 
     }
 
 
-  getPosts(category, limit)
-  {
 
-   // return this.http.get(this.baseUrl + '/' + limit).
-   // map(res => res.json());
 
-  }
-
-  createCORSRequest1(method:string, url:string){
+  getPosts(category, limit){
 
     let headers:any = new Headers();
-    headers.append('Access-Control-Allow-Origin', 'localhost');
+    headers.append('Access-Control-Allow-Origin', '*');
 
-    return this.http.get(url, {headers: headers}).map(res => res.res.json());
+    return this.http.get(this.baseUrl, {headers: headers}).map(res => res.json());
 
   }
 
@@ -93,8 +84,8 @@ export class RedditService {
       }
 
       // Response handlers.
-      xhr.onload = function () {
-        let items = xhr.response.json();
+      xhr.onload = function (items: any) {
+         items = xhr.response.json();
 //        var title = getTitle(items);
         alert('Response from CORS request to ' + url);
       };

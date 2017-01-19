@@ -16,17 +16,20 @@ var RedditsPage = (function () {
         this.navCtrl = navCtrl;
         this.heroesService = heroesService;
     }
-    RedditsPage.prototype.ngOnInit = function () { this.getHeroes(); };
-    RedditsPage.prototype.getHeroes = function () {
-        var baseUrl = 'http://127.0.0.1:3000/api/v1/heroes/';
-        var xhr = this.items = this.heroesService.createCORSRequest('GET', baseUrl).response.data;
-        alert(this.items);
-        xhr.onload = function () {
-            var text = xhr.responseText;
-        };
-        xhr.onerror = function () {
-            alert('Woops, there was an error making the request.');
-        };
+    RedditsPage.prototype.ngOnInit = function () {
+        this.getPosts('sports', 5);
+    };
+    RedditsPage.prototype.getPosts = function (category, limit) {
+        var _this = this;
+        this.heroesService.getPosts(category, limit).subscribe(function (response) {
+            _this.items = response.data.children;
+        });
+    };
+    /*
+    ngOnInit() { this.getHeroes(); }
+  */
+    RedditsPage.prototype.hack = function (val) {
+        return Array.from(val);
     };
     return RedditsPage;
 }());

@@ -7,10 +7,15 @@
 </ion-header>
 
 <ion-content padding>
-  heroes list
   <ion-list>
     <ion-item *ngFor="let item of items">
-        {{item.name}}
+      <ion-thumbnail *ngIf="item.thumbnail" item-left>
+        <img src="http://localhost:3000/{{item.thumbnail}}">
+      </ion-thumbnail>
+      <h4>{{item.name}}</h4>
+      <p>
+
+      </p>
     </ion-item>
   </ion-list>
 </ion-content>
