@@ -7,18 +7,10 @@
 </ion-header>
 
 <ion-content padding>
+  heroes list
   <ion-list>
     <ion-item *ngFor="let item of items">
-      <h2> doing something</h2>
-      <!--  <ion-thumbnail *ngIf="item.data.thumbnail" item-left>
-          <img src="{{item.data.thumbnail}}">
-        </ion-thumbnail>
-      <h4>{{item.data.hero.name}}</h4>-->
-      <p>
-      <!--  <ion-icon name="thumbs-up">{{item.data.score}}</ion-icon>&nbsp;&nbsp;
-        <ion-icon name="chatboxes">{{item.data.num_comments}}</ion-icon>-->
-
-      </p>
+        {{item.name}}
     </ion-item>
   </ion-list>
 </ion-content>

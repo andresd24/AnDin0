@@ -3,18 +3,14 @@
  */
 
 import  {Injectable} from  '@angular/core';
-import {Http} from  '@angular/http';
-import 'rxjs/Rx'
-import './xhr-xdr-adapter.js';
-import {Response} from '@angular/http';
-
-//import {@CrossOrigin} from './xhr-xdr-adapter.js';
+import {Http, Headers} from  '@angular/http';
+import 'rxjs/Rx.js';
+//import './xhr-xdr-adapter.js';
 
 
 declare var XDomainRequest: { new (); create(); };
 
 
-//@CrossOrigin()
 @Injectable()
 export class RedditService {
     http: any;
@@ -27,7 +23,9 @@ export class RedditService {
     {
         this.http = http;
         //this.baseUrl = 'https://www.reddit.com/r';
-        this.baseUrl = 'http://localhost:3000/api/v1/heroes/';
+        this.baseUrl = 'http://127.0.0.1:3000/api/v1/heroes/';
+        var xhr = this.createCORSRequest('GET', this.baseUrl)
+        xhr.send();
 
     }
 
@@ -36,40 +34,79 @@ export class RedditService {
   {
 
    // return this.http.get(this.baseUrl + '/' + limit).
-   //c© map(res => res.json());
+   // map(res => res.json());
 
   }
 
-  createCORSRequest(method:string, url:string){
-    var xhr = new XMLHttpRequest();
+  createCORSRequest1(method:string, url:string){
 
-    if ("withCredentials" in  xhr){
-      xhr.open(method, url, true);
-    } else if (typeof XDomainRequest != "undefined"){
-      xhr = new XDomainRequest();
-      xhr.open(method, url);
+    let headers:any = new Headers();
+    headers.append('Access-Control-Allow-Origin', 'localhost');
 
-      if (url != null) {
-        xhr.setRequestHeader("Access-Control-Allow-Origin", url);
+    return this.http.get(url, {headers: headers}).map(res => res.res.json());
+
+  }
+
+  // Create the XHR object.
+    createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+      if ("withCredentials" in xhr) {
+          // XHR for Chrome/Firefox/Opera/Safari.
+          xhr.open(method, url, true);
+      } else if (typeof XDomainRequest != "undefined") {
+        // XDomainRequest for IE.
+          xhr.open(method, url);
       } else {
-        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+          // CORS not supported.
+          xhr = null;
       }
-    } else {
-      xhr = null;
-    }
-    return xhr.send();
+    return xhr;
   }
 
-/*
-  request = this.createCORSRequest(method, "http://www.nczonline.net/");
-  if (request){
-    request.onload = function(){
-      //do something with request.responseText
-    };
-    request.send();
-  }*/
 
 
+// Make the actual CORS request.
+  makeCorsRequest(url) {
+    // This is a sample server that supports CORS.
+
+    var xhr = this.createCORSRequest('GET', url);
+    if (!xhr) {
+      alert('CORS not supported');
+      return;
+    }
+
+
+    // Response handlers.
+    function getTitle(text) {
+      return text.match('<title>(.*)?</title>')[1];
+    }
+
+// Make the actual CORS request.
+    function makeCorsRequest() {
+      // This is a sample server that supports CORS.
+      var url = 'http://127.0.0.1:3000/api/v1/heroes/';
+
+      var xhr = this.createCORSRequest('GET', url);
+      if (!xhr) {
+        alert('CORS not supported');
+        return;
+      }
+
+      // Response handlers.
+      xhr.onload = function () {
+        let items = xhr.response.json();
+//        var title = getTitle(items);
+        alert('Response from CORS request to ' + url);
+      };
+
+      xhr.onerror = function () {
+        alert('Woops, there was an error making the request.');
+      };
+
+      xhr.send();
+    }
+
+  }
 }
 
 
